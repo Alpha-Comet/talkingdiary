@@ -27,7 +27,7 @@ def resume(lastDate, lastTime):
     
     Converter.writer(file)
 
-def redefine(newDate, newTime, lastDate):
+def redefine(newDate, newTime):
     '''
     Writes the final journal in a new file.
     '''
@@ -48,13 +48,11 @@ def redefine(newDate, newTime, lastDate):
     timeFormat = f"{hour}:{minute}:{second}"
 
     file = rf"Diary\{newDate}.md"
-    last_file = rf"Diary\{lastDate}.md"
 
     with open(file, "w", encoding="utf-8") as f:
         f.write(f"# {dateFormat}\n\n## {timeFormat}\n\n{content}")
     
     Converter.writer(file)
-    Converter.delete_md(last_file)
 
 # Accessing the datetime from new_datetime
 
@@ -81,13 +79,13 @@ if path.exists("Data/last_datetime.dat"):
         resume(lastDate, lastTime)
         
     else:
-        redefine(newDate, newTime, lastDate)
+        redefine(newDate, newTime)
 
 else:
     with open("Data/last_datetime.dat", "w") as f:
         f.write(newDatetime)
 
-    redefine(newDate, newTime, newDate)
+    redefine(newDate, newTime)
 
 with open("Data/record.dat", "w") as f:
     f.write("")
