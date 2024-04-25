@@ -361,10 +361,6 @@ def exit():
 
 root = ctk.CTk()
 
-
-app_icon = ctk.CTkImage(dark_image=icon_grabber("app_icon"))
-root.iconphoto(True, app_icon)
-
 root.title("Talking Diary")
 
 root.iconbitmap(r"Icons\app_icon_transparent.ico")
