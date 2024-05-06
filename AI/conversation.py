@@ -24,7 +24,7 @@ options = Options()
 
 # Using WebDriver in existing chrome profile
 
-chrome_profile = r'C:\Users\scien\AppData\Local\Google\Chrome\User Data\Profile 71'
+chrome_profile = r'C:\Users\scien\AppData\Local\Google\Chrome\User Data\Profile 69'
 options.add_argument(f"user-data-dir={chrome_profile}")
 
 options.add_argument("--headless=new")
@@ -114,6 +114,18 @@ def misc_dynamic(element):
 
 Misc.dynamic = lambda element: misc_dynamic(element)
 
+def popup_handler():
+    popup_handler = driver.find_element(By.XPATH, '//*[@id="__next"]/main/div/div/div/div/div/div[2]/button')
+    popup_handler.click()
+
+    WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/main/div/div/div/div/div/div/div[2]/button'))
+    )
+
+    no_account = driver.find_element(By.XPATH, '//*[@id="__next"]/main/div/div/div/div/div/div/div[2]/button')
+    no_account.click()
+
+
 # Chat Functions
 
 def chat_input(input):
@@ -122,8 +134,22 @@ def chat_input(input):
     textarena.send_keys(input + Keys.ENTER)
 
 def chat_output():
-    response = driver.find_element(By.XPATH, '//*[@id="__next"]/main/div/div/div[3]/div[1]/div[2]/div/div/div/div[3]/div/div/div[2]/div[1]/div')
-    final_output = Misc.dynamic(response)
+    def chat_output_process():
+        global final_output
+        while True:
+            response = driver.find_element(By.XPATH, '//*[@id="__next"]/main/div/div/div[3]/div[1]/div[2]/div/div/div/div[3]/div/div/div[2]/div[1]/div')
+            final_output = Misc.dynamic(response)
+
+            if final_output == "":
+                pass
+            else:
+                break
+    try:
+        chat_output_process()
+
+    except:
+        popup_handler()
+        chat_output_process()
 
     return final_output
 
@@ -148,9 +174,13 @@ def misc_getname():
     profile = driver.find_element(By.XPATH, '//*[@id="__next"]/main/div/div/div[1]/a[2]')
     profile.click()
 
+    Misc.screenshot(3)
+
     WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/main/div/div/div[2]/div[1]/div/div/h1'))
     )
+
+    Misc.screenshot(4)
 
     name = driver.find_element(By.XPATH, '//*[@id="__next"]/main/div/div/div[2]/div[1]/div/div/h1')
     name = name.text
@@ -217,7 +247,6 @@ def misc_login(facebook_id, facebook_pass):
     password = driver.find_element(By.XPATH, '//*[@id="m_login_password"]')
     password.send_keys(facebook_pass)
 
-
     time.sleep(1)
 
     login = driver.find_element(By.XPATH, '//*[@id="login_password_step_element"]/button')
@@ -254,5 +283,6 @@ Misc.login = lambda facebook_id, facebook_pass: misc_login(facebook_id, facebook
 if path.exists(rf'Data\loginStatus.dat'):
     Misc.wait()
     Misc.username = Misc.getname()
+
 else:
     pass

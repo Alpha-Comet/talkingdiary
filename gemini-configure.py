@@ -1,5 +1,8 @@
+from os import path
 import pyperclip as pc
-import os
 
-API = pc.paste()
-os.environ['GEMINI_API_KEY'] = API
+if path.exists('Data/geminiapi.dat'):
+    pass
+else:
+    with open('Data/geminiapi.dat', 'w') as f:
+        f.write(pc.paste())

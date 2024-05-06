@@ -81,13 +81,13 @@ def write_to_diary(entry, chat_frame, frame):
     if entry == "!reset":
         confirmation(frame=frame, yes_command=reset_handler)
     else:
-
         Chat.input(entry)
+
         time.sleep(2)
         pi_says = Chat.output()
     
         with open("Data/record.dat", "a", encoding="utf-8") as f:
-            f.write(f"Me: {entry}\n   {pi_says}\n")
+            f.write(f"{entry}\n")
         
         with open("Data/history.dat", "a", encoding="utf-8") as f:
             f.write(f"\n\nMe: {entry}\n\nPi: {pi_says}")
@@ -282,7 +282,11 @@ def start():
         c_history = f.read()
 
     if c_history == "":
-        initial = ctk.CTkLabel(chat_frame, text=f"Hey {Misc.username}, great to meet you. I'm Pi, your personal AI.\nMy goal is to be useful, friendly and fun. Ask me for advice, for answers, or let's talk about whatever's on your mind.\nHow's your day going?", font=("Cascadia Mono", 14), wraplength=1000, justify = ctk.LEFT)
+        if Misc.username == "Profile":
+            initial = ctk.CTkLabel(chat_frame, text=f"Hey there, great to meet you. I'm Pi, your personal AI.\nMy goal is to be useful, friendly and fun. Ask me for advice, for answers, or let's talk about whatever's on your mind.\nHow's your day going?", font=("Cascadia Mono", 14), wraplength=1000, justify = ctk.LEFT)
+        else:
+            initial = ctk.CTkLabel(chat_frame, text=f"Hey {Misc.username}, great to meet you. I'm Pi, your personal AI.\nMy goal is to be useful, friendly and fun. Ask me for advice, for answers, or let's talk about whatever's on your mind.\nHow's your day going?", font=("Cascadia Mono", 14), wraplength=1000, justify = ctk.LEFT)
+        
         initial.pack(anchor = ctk.NW)
 
     else:
@@ -363,7 +367,7 @@ root = ctk.CTk()
 
 root.title("Talking Diary")
 
-root.iconbitmap(r"Icons\app_icon_transparent.ico")
+root.iconbitmap(r"Icons\app_icon.ico")
 
 root._state_before_windows_set_titlebar_color = 'zoomed'
 
@@ -399,7 +403,10 @@ invisible_frame = ctk.CTkFrame(guide, fg_color="transparent", height = 200, widt
 invisible_frame.grid(row = 0, column = 0)
 
 try:
-    welcome = ctk.CTkLabel(guide, text=f"Welcome back, {Misc.username}!", font=('Century Gothic', 70), text_color="white")
+    if Misc.username == "Profile":
+        welcome = ctk.CTkLabel(guide, text=f"Welcome back!", font=('Century Gothic', 70), text_color="white")
+    else:
+        welcome = ctk.CTkLabel(guide, text=f"Welcome back, {Misc.username}!", font=('Century Gothic', 70), text_color="white")
 
 except:
     welcome = ctk.CTkLabel(guide, text=f"Welcome back!", font=('Century Gothic', 70), text_color="white")
